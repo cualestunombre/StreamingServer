@@ -21,8 +21,7 @@ app.get("/",(req,res,next)=>{
         const start = parseInt(parts[0]);
         const _end = parts[1] ? parseInt(parts[1]) : fileSize-1;
         const end = Math.min(_end,start + MAX_CHUNK_SIZE-1);
-        const chunk = end-start+1;
-        res.writeHead(206,{'Content-Type':'video/mp4','Content-Length':chunk,
+        res.writeHead(206,{'Content-Type':'video/mp4','Content-Length':fileSize,
         'Accept-Ranges':'bytes','Content-Range':`bytes ${start}-${end}/${fileSize}`
         });
         const readStream = fs.createReadStream(path,{start,end});
