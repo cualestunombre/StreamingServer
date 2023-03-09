@@ -22,21 +22,22 @@ chatgpt또한, chunked encoding 기술을 사용해, 답변을 전송합니다.
 */
 app.get("/partialData",(req,res,next)=>{
     const file = fs.readFileSync("./text.txt");
-    const data = file.toString();
+    const data = file.toString(); //text파일을 읽어와서 스트링으로 변환합니다
     res.writeHead(200,{'Content-Type':'text/plain',
-    'Transfer-Encoding':'chunked'});
+    'Transfer-Encoding':'chunked'}); //http헤더에 chunked를 명시해야 합니다
     let index = 0;
     const intervalId = setInterval(()=>{
         if(index>=data.length){
             clearInterval(intervalId);
-            res.end();
+            res.end(); // 이때 모두 다 읽었다면, res.end()를 통해 http통신의 끝을 알립니다.
             return;
         }
         const chunk = data.slice(index,index+1);
         index+=1;
         res.write(chunk);
         return;
-    },30);
+    },30); //0.03초마다 data를 1글자식 읽어와서 res.write()를 통해 클라이언트로 전송합니다.
+
     
 });
 
