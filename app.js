@@ -12,7 +12,7 @@ app.get("/",(req,res,next)=>{
     res.status(200).header({"Content-Type":"text/html"}).send(html);
 });
 
-app.get("/parital",(req,res)=>{
+app.get("/partial",(req,res)=>{
     res.render("ptest");
 });
 /* 서버에서 chunked encoding기술을 사용해, 하나의 
