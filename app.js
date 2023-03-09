@@ -1,11 +1,50 @@
 const express=require("express");
 const morgan = require("morgan");
+const path = require("path");
 const fs = require("fs");
 const app = express();
-app.use(morgan("dev"));
 
+app.use(morgan("dev"));
+app.set("view engine", "ejs");
 
 app.get("/",(req,res,next)=>{
+    const html = fs.readFileSync("./views/main.ejs");
+    res.status(200).header({"Content-Type":"text/html"}).send(html);
+});
+
+app.get("/parital",(req,res)=>{
+    res.render("ptest");
+});
+/* 서버에서 chunked encoding기술을 사용해, 하나의 
+http요청을 분할해서 클라이언트로 전송하는 방법에 대한 예시 입니다.
+chatgpt가 어떤 방식으로, 응답을 분할해서 보낼까 궁금하여 알아보게 되었는데,
+chatgpt또한, chunked encoding 기술을 사용해, 답변을 전송합니다.
+*/
+app.get("/partialData",(req,res,next)=>{
+    const file = fs.readFileSync("./text.txt");
+    const data = file.toString();
+    res.writeHead(200,{'Content-Type':'text/plain',
+    'Transfer-Encoding':'chunked'});
+    let index = 0;
+    const intervalId = setInterval(()=>{
+        if(index>=data.length){
+            clearInterval(intervalId);
+            res.end();
+            return;
+        }
+        const chunk = data.slice(index,index+1);
+        index+=1;
+        res.write(chunk);
+        return;
+    },30);
+    
+});
+
+/* http로 스트리밍 서버를 구축하는 기초적인 코드입니다. 
+위의 chunked encoding과는 다르게, 독립적인 http 요청에 대한,
+독립적인 http응답이 이뤄집니다.
+*/
+app.get("/video",(req,res,next)=>{
     const path = './uploads/blackpink.mov';
     const stat = fs.statSync(path);
     const fileSize = stat.size;
@@ -21,7 +60,8 @@ app.get("/",(req,res,next)=>{
         const start = parseInt(parts[0]);
         const _end = parts[1] ? parseInt(parts[1]) : fileSize-1;
         const end = Math.min(_end,start + MAX_CHUNK_SIZE-1);
-        res.writeHead(206,{'Content-Type':'video/mp4','Content-Length':fileSize,
+        const chunk = end-start+1;
+        res.writeHead(206,{"cache-control":"max-age=60",'Content-Type':'video/mp4','Content-Length':chunk,
         'Accept-Ranges':'bytes','Content-Range':`bytes ${start}-${end}/${fileSize}`
         });
         const readStream = fs.createReadStream(path,{start,end});
@@ -31,6 +71,4 @@ app.get("/",(req,res,next)=>{
 
 
 
-app.listen(9000,()=>{
-    console.log("9000번 포트 OPEN");
-});
+app.listen(9000,'0.0.0.0');
