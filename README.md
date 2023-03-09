@@ -1,14 +1,14 @@
 본 프로젝트는 
 http의 chunked transfer기술과 streaming기술에 대한
 기본 코드를 작성하는 것이 목적입니다
-\n
+<br>
 <사용법> 
   1. 코드를 다운 받고 npm install을 합니다.
   2. 콘솔을 통해 해당 디렉토리로 이동한 후 node app.js를 실행합니다.
   3. '127.0.0.1:9000'url을 들어가서 실시간 스트리밍 동영상을 볼 수 있습니다.
   4. '127.0.0.1:9000/partial'을 들어가서 chunked된 데이터를 받아 볼 수 있습니다.
 <사용법/>
-\n
+<br>
 
 
 먼저 chunked transfer기술 부터 알아봅시다 app.js를 실행시키고
