@@ -1,0 +1,7 @@
+Hello, my name is SeokWoo and I'm sending you partial data. 
+Although it's a single HTTP response, it's divided into multiple parts using chunked transfer encoding. 
+This may give the impression that the data is being sent in real-time, 
+like with WebSockets, but that's not the case. Instead, chunked transfer encoding allows you 
+to divide a large HTTP packet into smaller entities and send them to the client. 
+However, it's important to note that these entities are not independent HTTP response packets, 
+but rather parts of a single HTTP packet that are sent sequentially
