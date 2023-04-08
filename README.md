@@ -21,7 +21,7 @@ http의 chunked transfer기술과 streaming기술에 대한
 쪼개어, 전송하는 것입니다. 그러나 여러개의 http응답이 
 아닌 하나의 http응답이라는 것에 유의 하여야 합니다.
 실제로, chatgpt는 해당 기술을 사용하여, 
-응답이 생성되는 만큼 chunk data를 클라이언트에게
+응답이 생성되는 만큼만 chunk data를 클라이언트에게
 답변을 전송합니다. 자세한 원리는 app.js의 코드를 참조하세요!
 <img width="100%" src="https://user-images.githubusercontent.com/47946305/223950865-ce32392d-2f0d-448b-a908-ddd21b28ecf8.gif">
 
